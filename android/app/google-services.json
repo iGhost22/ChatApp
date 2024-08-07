@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1039040230340",
+    "project_id": "chatapp-rhyming",
+    "storage_bucket": "chatapp-rhyming.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1039040230340:android:4217060b158c664eb02a91",
+        "android_client_info": {
+          "package_name": "com.rhymings.chatapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJ5KzbdJnrRylhr8HRZKkWIqXglFH7yfw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
