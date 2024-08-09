@@ -1,3 +1,5 @@
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -31,24 +33,34 @@ class ChatRoomView extends GetView<ChatRoomController> {
             ],
           ),
         ),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Lorem Ipsum',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.white,
+        title: WillPopScope(
+          onWillPop: () {
+            if (controller.isShowEmoji.isTrue) {
+              controller.isShowEmoji.value = false;
+            } else {
+              Navigator.pop(context);
+            }
+            return Future.value(false);
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Lorem Ipsum',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                ),
               ),
-            ),
-            Text(
-              'Online',
-              style: TextStyle(
-                fontSize: 13,
-                color: Colors.white,
+              Text(
+                'Online',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.white,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         centerTitle: false,
       ),
@@ -65,7 +77,10 @@ class ChatRoomView extends GetView<ChatRoomController> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(bottom: context.mediaQueryPadding.bottom),
+            margin: EdgeInsets.only(
+                bottom: controller.isShowEmoji.isTrue
+                    ? 5
+                    : context.mediaQueryPadding.bottom),
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             width: Get.width,
             child: Row(
@@ -74,9 +89,14 @@ class ChatRoomView extends GetView<ChatRoomController> {
                 Expanded(
                   child: Container(
                     child: TextField(
+                      controller: controller.chatC,
+                      focusNode: controller.focusNode,
                       decoration: InputDecoration(
                         prefixIcon: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            controller.focusNode.unfocus();
+                            controller.isShowEmoji.toggle();
+                          },
                           icon: Icon(Icons.emoji_emotions_outlined),
                         ),
                         border: OutlineInputBorder(
@@ -104,6 +124,41 @@ class ChatRoomView extends GetView<ChatRoomController> {
                 ),
               ],
             ),
+          ),
+          Obx(
+            () => (controller.isShowEmoji.isTrue)
+                ? Container(
+                    height: 325,
+                    child: EmojiPicker(
+                      onEmojiSelected: (category, emoji) {
+                        controller.addEmojiToChat(emoji);
+                      },
+                      onBackspacePressed: () {
+                        controller.deleteEmoji();
+                      },
+                      // textEditingController:
+                      // textEditingController, //
+                      config: Config(
+                        height: 256,
+                        // bgColor: const Color(0xFFF2F2F2),
+                        checkPlatformCompatibility: true,
+                        emojiViewConfig: EmojiViewConfig(
+                          // Issue: https://github.com/flutter/flutter/issues/28894
+                          emojiSizeMax: 28 *
+                              (foundation.defaultTargetPlatform ==
+                                      TargetPlatform.iOS
+                                  ? 1.20
+                                  : 1.0),
+                        ),
+                        swapCategoryAndBottomBar: false,
+                        skinToneConfig: const SkinToneConfig(),
+                        categoryViewConfig: const CategoryViewConfig(),
+                        bottomActionBarConfig: const BottomActionBarConfig(),
+                        searchViewConfig: const SearchViewConfig(),
+                      ),
+                    ),
+                  )
+                : SizedBox(),
           ),
         ],
       ),
