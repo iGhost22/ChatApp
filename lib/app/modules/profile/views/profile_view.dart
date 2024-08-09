@@ -1,4 +1,6 @@
 import 'package:avatar_glow/avatar_glow.dart';
+import '../../../controllers/auth_controller.dart';
+import '../../../routes/app_pages.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -9,19 +11,22 @@ class ProfileView extends GetView<ProfileController> {
   const ProfileView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final authC = Get.find<AuthController>();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Get.back();
+          },
           icon: Icon(Icons.arrow_back),
         ),
         title: const Text('Profile'),
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => authC.logout(),
             icon: Icon(Icons.logout),
           ),
         ],
@@ -71,7 +76,7 @@ class ProfileView extends GetView<ProfileController> {
             child: Column(
               children: [
                 ListTile(
-                  onTap: () {},
+                  onTap: () => Get.toNamed(Routes.UPDATE_STATUS),
                   leading: Icon(Icons.note_add_outlined),
                   title: Text(
                     "Update Status",
@@ -82,7 +87,7 @@ class ProfileView extends GetView<ProfileController> {
                   trailing: Icon(Icons.arrow_right),
                 ),
                 ListTile(
-                  onTap: () {},
+                  onTap: () => Get.toNamed(Routes.CHANGE_PROFILE),
                   leading: Icon(Icons.account_circle_outlined),
                   title: Text(
                     "Chang Profile",

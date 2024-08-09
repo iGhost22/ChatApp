@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import '../controllers/search_controller.dart';
 
-import '../controllers/search_controller.dart' as search;
-
-class SearchView extends GetView<SearchController> {
+class SearchView extends GetView<SearchhController> {
   SearchView({Key? key}) : super(key: key);
 
   final List<Widget> friends = List.generate(
@@ -64,6 +63,7 @@ class SearchView extends GetView<SearchController> {
             child: Align(
               alignment: Alignment.bottomCenter,
               child: TextField(
+                controller: controller.searchC,
                 cursorColor: Colors.red[900],
                 decoration: InputDecoration(
                   fillColor: Colors.white,
