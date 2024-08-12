@@ -39,6 +39,15 @@ class myApp extends StatelessWidget {
           //   getPages: AppPages.routes,
           // );
 
+          // return Obx(
+          //   () => GetMaterialApp(
+          //     title: "Application",
+          //     initialRoute:
+          //         authC.isSkipIntro.isTrue ? Routes.HOME : Routes.LOGIN,
+          //     getPages: AppPages.routes,
+          //   ),
+          // );
+
           return FutureBuilder(
             future: Future.delayed(Duration(seconds: 3)),
             builder: (context, snapshot) {
