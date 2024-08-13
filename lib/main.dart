@@ -6,11 +6,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'app/routes/app_pages.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init();
   runApp(
     myApp(),
   );
@@ -33,21 +35,6 @@ class myApp extends StatelessWidget {
         }
 
         if (snapshot.connectionState == ConnectionState.done) {
-          // return GetMaterialApp(
-          //   title: "Chat Application",
-          //   initialRoute: Routes.CHAT_ROOM,
-          //   getPages: AppPages.routes,
-          // );
-
-          // return Obx(
-          //   () => GetMaterialApp(
-          //     title: "Application",
-          //     initialRoute:
-          //         authC.isSkipIntro.isTrue ? Routes.HOME : Routes.LOGIN,
-          //     getPages: AppPages.routes,
-          //   ),
-          // );
-
           return FutureBuilder(
             future: Future.delayed(Duration(seconds: 3)),
             builder: (context, snapshot) {
@@ -65,7 +52,10 @@ class myApp extends StatelessWidget {
                 );
               }
 
-              return SplashScreen();
+              return FutureBuilder(
+                future: authC.firstInitialized(),
+                builder: (context, snapshot) => SplashScreen(),
+              );
             },
           );
         }

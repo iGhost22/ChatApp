@@ -19,7 +19,7 @@ class LoginView extends GetView<LoginController> {
           padding: const EdgeInsets.all(30),
           child: Center(
             child: Column(
-              mainAxisAlignment:          MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   width: Get.width * 0.7,
