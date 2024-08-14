@@ -1,4 +1,5 @@
 import 'package:chatapp/app/routes/app_pages.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -11,6 +12,8 @@ class AuthController extends GetxController {
   GoogleSignIn _googleSignIn = GoogleSignIn();
   GoogleSignInAccount? _currentUser;
   UserCredential? userCredential;
+
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<void> firstInitialized() async {
     await autoLogin().then((value) {
@@ -76,6 +79,32 @@ class AuthController extends GetxController {
           box.remove("skipIntro");
         }
         box.write("skipIntro", true);
+
+        CollectionReference users = firestore.collection('users');
+        final checkuser = await users.doc(_currentUser!.email).get();
+
+        if (checkuser.data() == null) {
+          await users.doc(_currentUser!.email).set({
+            "uid": userCredential!.user!.uid,
+            "name": _currentUser!.displayName,
+            "keyName": _currentUser!.displayName!.substring(0, 1).toUpperCase(),
+            "email": _currentUser!.email,
+            "photoUrl": _currentUser!.photoUrl ?? "noimage",
+            "status": "",
+            "creationTime":
+                userCredential!.user!.metadata.creationTime!.toIso8601String(),
+            "lastSignInTime": userCredential!.user!.metadata.lastSignInTime!
+                .toIso8601String(),
+            "updatedTime": DateTime.now().toIso8601String(),
+          });
+
+          await users.doc(_currentUser!.email).collection("chats");
+        } else {
+          await users.doc(_currentUser!.email).update({
+            "lastSignInTime": userCredential!.user!.metadata.lastSignInTime!
+                .toIso8601String(),
+          });
+        }
 
         isAuth.value = true;
         Get.offAllNamed(Routes.HOME);
